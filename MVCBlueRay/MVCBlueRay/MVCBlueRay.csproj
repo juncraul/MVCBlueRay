@@ -217,6 +217,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\BluRay\Create.cshtml" />
     <Content Include="Views\BluRay\Index.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\AddBluRay.cshtml" />
   </ItemGroup>
   <ItemGroup>

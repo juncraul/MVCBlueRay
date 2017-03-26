@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<MVCBlueRay.Models.BluRay>
-
 @{
     ViewBag.Title = "LoggedIn";
 }
@@ -51,6 +50,8 @@
         </tr>
     }
 
-    @Html.ActionLink("Add a Blu-Ray to collection", "AddBluRay")
-
 </table>
+
+@Html.ActionLink("Add a Blu-Ray to collection", "AddBluRay")
+<br />
+@Html.ActionLink("Change User settings", "Edit", new { id = Session["UserID"] })

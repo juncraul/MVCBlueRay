@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVCBlueRay.Models.CheckBloxViewModel>
+﻿@model MVCBlueRay.Models.UserViewModel
 
 @{
     ViewBag.Title = "AddBluRay";
@@ -6,40 +6,35 @@
 
 <h2>AddBluRay</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Checked)
-        </th>
-    </tr>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>UserViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.EditorFor(modelItem => item.Checked)
-        </td>
-    </tr>
+
+        @for (int i = 0; i < Model.BluRays.Count(); i++)
+        {
+            @Html.EditorFor(m => Model.BluRays[i].Checked)
+            @Html.DisplayFor(m => Model.BluRays[i].Name)
+
+            @Html.HiddenFor(m => Model.BluRays[i].Name)
+            @Html.HiddenFor(m => Model.BluRays[i].Id)
+            <br />
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
 
-</table>
-
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="AddBluRay" class="btn btn-default" />
-    </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
 </div>

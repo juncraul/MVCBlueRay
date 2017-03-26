@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MVCBlueRay.Models;
+using System.Net;
 
 namespace MVCBlueRay.Controllers
 {
@@ -74,68 +75,116 @@ namespace MVCBlueRay.Controllers
 
         public ActionResult LoggedIn()
         {
-            if(Session["UserID"] != null)
-            {
-                int id = int.Parse(Session["UserID"].ToString());
-                using (MyDbContext db = new MyDbContext())
-                {
-                    User userFound = db.Users.FirstOrDefault(u => u.Id == id);
-                    List<BluRay> userBlueRay = db.UserBlueRays.Where(u => u.UserId == id).Select(a=>a.BluRay).ToList();
-                    return View(userBlueRay);
-                }
-            }
-            else
-            {
+
+            if (Session["UserID"] == null)
                 return RedirectToAction("Login");
+
+            int id = int.Parse(Session["UserID"].ToString());
+            using (MyDbContext db = new MyDbContext())
+            {
+                User userFound = db.Users.FirstOrDefault(u => u.Id == id);
+                List<BluRay> userBlueRay = db.UserBlueRays.Where(u => u.UserId == id).Select(a=>a.BluRay).ToList();
+                return View(userBlueRay);
             }
         }
 
-        public ActionResult AddBluRay()
+        //Edit
+        public ActionResult Edit(int id)
         {
-            if (Session["UserID"] != null)
+            using (MyDbContext db = new MyDbContext())
             {
-                int id = int.Parse(Session["UserID"].ToString());
-                using (MyDbContext db = new MyDbContext())
+                User user = db.Users.FirstOrDefault(u => u.Id == id);
+                if(user != null)
                 {
-                    List<CheckBloxViewModel> bluRay = db.BluRays
-                        .Select(a => new CheckBloxViewModel
-                        {
-                            Id = a.Id,
-                            Name = a.Title,
-                            Checked = db.UserBlueRays.Count(u=>u.BluRayId == a.Id && u.UserId == id) == 0
-                        }).ToList();
-
-                    return View(bluRay);
+                    return View(user);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Login");
+                else
+                {
+                    return HttpNotFound();
+                }
             }
         }
 
         [HttpPost]
-        public ActionResult AddBluRay(List<CheckBloxViewModel> checkBoxs)
+        public ActionResult Edit(User user)
         {
-            if (Session["UserID"] != null)
+            if(ModelState.IsValid)
             {
-                int id = int.Parse(Session["UserID"].ToString());
                 using (MyDbContext db = new MyDbContext())
                 {
-                    foreach(CheckBloxViewModel c in checkBoxs)
-                    {
-                        db.UserBlueRays.Add(new UserBlueRay()
-                        {
-                            BluRayId = c.Id,
-                            UserId = id
-                        });
-                    }
-                    return View();
+                    db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
             }
-            else
-            {
+            return View(user);
+        }
+
+        public ActionResult AddBluRay()
+        {
+            if (Session["UserID"] == null)
                 return RedirectToAction("Login");
+            
+            int id = int.Parse(Session["UserID"].ToString());
+            using (MyDbContext db = new MyDbContext())
+            {
+                User user = db.Users.FirstOrDefault(u => u.Id == id);
+                List<CheckBloxViewModel> bluRay = db.BluRays
+                    .Select(a => new CheckBloxViewModel
+                    {
+                        Id = a.Id,
+                        Name = a.Title,
+                        Checked = db.UserBlueRays.Count(u=>u.BluRayId == a.Id && u.UserId == id) > 0
+                    }).ToList();
+
+                UserViewModel userViewModel = new UserViewModel()
+                {
+                    BluRays = bluRay,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Id = user.Id
+                };
+
+                return View(userViewModel);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddBluRay(UserViewModel userView)
+        {
+            if (Session["UserID"] == null)
+                return RedirectToAction("Login");
+            
+            int id = int.Parse(Session["UserID"].ToString());
+            using (MyDbContext db = new MyDbContext())
+            {
+                User user = db.Users.FirstOrDefault(u => u.Id == id);
+
+                //Delete any uncheked bluerays
+                foreach(CheckBloxViewModel c in userView.BluRays.Where(b=>!b.Checked))
+                {
+                    //check if blueray exists in user's collection
+                    UserBlueRay userBlueRayToDelete = user.UserBlueRays.FirstOrDefault(u => u.BluRayId == c.Id);
+                    if (userBlueRayToDelete == null) continue;
+
+                    //delete the use-bluray connection
+                    db.Entry(userBlueRayToDelete).State = System.Data.Entity.EntityState.Deleted;
+                }
+
+                //Loop through checked bluerays and add them to the user
+                foreach (CheckBloxViewModel c in userView.BluRays.Where(b=>b.Checked))
+                {
+                    //Blueray already exists in user's collection
+                    if (db.UserBlueRays.FirstOrDefault(a => a.BluRayId == c.Id) != null) continue;
+
+                    //Create new user-bluray connection and add it 
+                    UserBlueRay entity = db.UserBlueRays.Create();
+                    entity.BluRayId = c.Id;
+                    entity.UserId = id;
+                    db.UserBlueRays.Add(entity);
+                }
+                db.SaveChanges();
+                return RedirectToAction("LoggedIn");
             }
         }
     }
