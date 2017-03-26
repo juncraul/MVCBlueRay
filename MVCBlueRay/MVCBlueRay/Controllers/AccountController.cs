@@ -31,6 +31,16 @@ namespace MVCBlueRay.Controllers
             {
                 using (MyDbContext db = new MyDbContext())
                 {
+                    if(db.Users.FirstOrDefault(a=>a.Username == user.Username) != null)
+                    {
+                        ViewBag.ErrorMessage = "Username is taken." + Environment.NewLine;
+                        return View();
+                    }
+                    if (db.Users.FirstOrDefault(a => a.Email == user.Email) != null)
+                    {
+                        ViewBag.ErrorMessage = "Email is taken." + Environment.NewLine;
+                        return View();
+                    }
                     db.Users.Add(user);
                     db.SaveChanges();
                 }
@@ -164,7 +174,7 @@ namespace MVCBlueRay.Controllers
                 foreach(CheckBloxViewModel c in userView.BluRays.Where(b=>!b.Checked))
                 {
                     //check if blueray exists in user's collection
-                    UserBlueRay userBlueRayToDelete = user.UserBlueRays.FirstOrDefault(u => u.BluRayId == c.Id);
+                    UserBlueRay userBlueRayToDelete = user.UserBlueRays.FirstOrDefault(u => u.BluRayId == c.Id && u.UserId == user.Id);
                     if (userBlueRayToDelete == null) continue;
 
                     //delete the use-bluray connection
@@ -175,7 +185,7 @@ namespace MVCBlueRay.Controllers
                 foreach (CheckBloxViewModel c in userView.BluRays.Where(b=>b.Checked))
                 {
                     //Blueray already exists in user's collection
-                    if (db.UserBlueRays.FirstOrDefault(a => a.BluRayId == c.Id) != null) continue;
+                    if (db.UserBlueRays.FirstOrDefault(a => a.BluRayId == c.Id && a.UserId == user.Id) != null) continue;
 
                     //Create new user-bluray connection and add it 
                     UserBlueRay entity = db.UserBlueRays.Create();
