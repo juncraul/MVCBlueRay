@@ -65,3 +65,7 @@ D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\Microsoft.AI.Web.xml
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.csprojResolveAssemblyReference.cache
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.dll
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.pdb
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.dll
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.SqlServer.dll
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.xml
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.SqlServer.xml
