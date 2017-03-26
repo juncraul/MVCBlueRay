@@ -31,5 +31,7 @@ namespace MVCBlueRay.Models
         [Compare("Password", ErrorMessage ="Please confirm your password")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        public virtual ICollection<UserBlueRay> UserBlueRays { get; set; }
     }
 }

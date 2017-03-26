@@ -69,3 +69,7 @@ D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.dll
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.SqlServer.dll
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.xml
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\bin\EntityFramework.SqlServer.xml
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.InitialCreate.resources
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.csproj.GenerateResource.Cache
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.AddedBluRayModel.resources
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.AddedUserBlueRay.resources

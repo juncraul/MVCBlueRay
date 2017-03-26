@@ -8,6 +8,8 @@ namespace MVCBlueRay.Models
 {
     public class MyDbContext : DbContext
     {
-        public DbSet<User> User { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<BluRay> BluRays { get; set; }
+        public DbSet<UserBlueRay> UserBlueRays { get; set; }
     }
 }

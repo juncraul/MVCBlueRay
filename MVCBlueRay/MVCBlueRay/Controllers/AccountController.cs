@@ -14,7 +14,7 @@ namespace MVCBlueRay.Controllers
         {
             using (MyDbContext db = new MyDbContext())
             {
-                return View(db.User.ToList());
+                return View(db.Users.ToList());
             }
         }
 
@@ -30,7 +30,7 @@ namespace MVCBlueRay.Controllers
             {
                 using (MyDbContext db = new MyDbContext())
                 {
-                    db.User.Add(user);
+                    db.Users.Add(user);
                     db.SaveChanges();
                 }
                 ModelState.Clear();
@@ -50,7 +50,7 @@ namespace MVCBlueRay.Controllers
         {
             using (MyDbContext db = new MyDbContext())
             {
-                User userFound = db.User.FirstOrDefault(u => u.Username == user.Username);
+                User userFound = db.Users.FirstOrDefault(u => u.Username == user.Username);
                 if(userFound != null)
                 {
                     if(userFound.Password == user.Password)
@@ -76,7 +76,62 @@ namespace MVCBlueRay.Controllers
         {
             if(Session["UserID"] != null)
             {
-                return View();
+                int id = int.Parse(Session["UserID"].ToString());
+                using (MyDbContext db = new MyDbContext())
+                {
+                    User userFound = db.Users.FirstOrDefault(u => u.Id == id);
+                    List<BluRay> userBlueRay = db.UserBlueRays.Where(u => u.UserId == id).Select(a=>a.BluRay).ToList();
+                    return View(userBlueRay);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        public ActionResult AddBluRay()
+        {
+            if (Session["UserID"] != null)
+            {
+                int id = int.Parse(Session["UserID"].ToString());
+                using (MyDbContext db = new MyDbContext())
+                {
+                    List<CheckBloxViewModel> bluRay = db.BluRays
+                        .Select(a => new CheckBloxViewModel
+                        {
+                            Id = a.Id,
+                            Name = a.Title,
+                            Checked = db.UserBlueRays.Count(u=>u.BluRayId == a.Id && u.UserId == id) == 0
+                        }).ToList();
+
+                    return View(bluRay);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddBluRay(List<CheckBloxViewModel> checkBoxs)
+        {
+            if (Session["UserID"] != null)
+            {
+                int id = int.Parse(Session["UserID"].ToString());
+                using (MyDbContext db = new MyDbContext())
+                {
+                    foreach(CheckBloxViewModel c in checkBoxs)
+                    {
+                        db.UserBlueRays.Add(new UserBlueRay()
+                        {
+                            BluRayId = c.Id,
+                            UserId = id
+                        });
+                    }
+                    return View();
+                }
             }
             else
             {

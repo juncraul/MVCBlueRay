@@ -148,12 +148,30 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BluRayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703261054121_InitialCreate.cs" />
+    <Compile Include="Migrations\201703261054121_InitialCreate.Designer.cs">
+      <DependentUpon>201703261054121_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703261136110_AddedBluRayModel.cs" />
+    <Compile Include="Migrations\201703261136110_AddedBluRayModel.Designer.cs">
+      <DependentUpon>201703261136110_AddedBluRayModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703261340530_AddedUserBlueRay.cs" />
+    <Compile Include="Migrations\201703261340530_AddedUserBlueRay.Designer.cs">
+      <DependentUpon>201703261340530_AddedUserBlueRay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BluRay.cs" />
+    <Compile Include="Models\CheckBloxViewModel.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserBlueRay.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +215,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\LoggedIn.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\BluRay\Create.cshtml" />
+    <Content Include="Views\BluRay\Index.cshtml" />
+    <Content Include="Views\Account\AddBluRay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -215,6 +236,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703261054121_InitialCreate.resx">
+      <DependentUpon>201703261054121_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261136110_AddedBluRayModel.resx">
+      <DependentUpon>201703261136110_AddedBluRayModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261340530_AddedUserBlueRay.resx">
+      <DependentUpon>201703261340530_AddedUserBlueRay.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

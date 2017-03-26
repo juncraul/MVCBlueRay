@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MVCBlueRay.Models.CheckBloxViewModel>
+
+@{
+    ViewBag.Title = "AddBluRay";
+}
+
+<h2>AddBluRay</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Checked)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.EditorFor(modelItem => item.Checked)
+        </td>
+    </tr>
+}
+
+</table>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="AddBluRay" class="btn btn-default" />
+    </div>
+</div>
