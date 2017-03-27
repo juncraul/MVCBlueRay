@@ -6,6 +6,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVCBlueRay.Models
 {
+    public class ExternalLoginListViewModel
+    {
+        public string ReturnUrl { get; set; }
+    }
+
+    public class ExternalLoginConfirmationViewModel
+    {
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
     public class User
     {
         [Key]
@@ -19,7 +31,7 @@ namespace MVCBlueRay.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "First Name is required.")]
+        [Required(ErrorMessage = "Email is required.")]
         [RegularExpression(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage ="Please enter valid email.")]
         [StringLength(200, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
         public string Email { get; set; }
