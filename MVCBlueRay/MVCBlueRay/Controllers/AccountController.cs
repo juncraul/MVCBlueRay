@@ -13,10 +13,7 @@ namespace MVCBlueRay.Controllers
         // GET: Account
         public ActionResult Index()
         {
-            using (MyDbContext db = new MyDbContext())
-            {
-                return View(db.Users.ToList());
-            }
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Register()
@@ -81,6 +78,13 @@ namespace MVCBlueRay.Controllers
                 }
             }
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            Session["UserID"] = null;
+            Session["Username"] = null;
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult LoggedIn()
