@@ -165,6 +165,10 @@
     <Compile Include="Migrations\201703261340530_AddedUserBlueRay.Designer.cs">
       <DependentUpon>201703261340530_AddedUserBlueRay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703271421480_AddedDataTypeRange.cs" />
+    <Compile Include="Migrations\201703271421480_AddedDataTypeRange.Designer.cs">
+      <DependentUpon>201703271421480_AddedDataTypeRange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BluRay.cs" />
     <Compile Include="Models\CheckBloxViewModel.cs" />
@@ -224,11 +228,11 @@
     <Content Include="Views\Account\LoggedIn.cshtml" />
     <Content Include="Views\BluRay\Create.cshtml" />
     <Content Include="Views\BluRay\Index.cshtml" />
-    <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\AddBluRay.cshtml" />
     <Content Include="Views\Shared\_Login.cshtml" />
     <Content Include="Views\BluRay\Edit.cshtml" />
     <Content Include="Views\BluRay\Details.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -257,6 +261,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703261340530_AddedUserBlueRay.resx">
       <DependentUpon>201703261340530_AddedUserBlueRay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703271421480_AddedDataTypeRange.resx">
+      <DependentUpon>201703271421480_AddedDataTypeRange.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

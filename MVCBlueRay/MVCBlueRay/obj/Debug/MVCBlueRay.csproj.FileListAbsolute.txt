@@ -73,3 +73,4 @@ D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migr
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.csproj.GenerateResource.Cache
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.AddedBluRayModel.resources
 D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.AddedUserBlueRay.resources
+D:\Programming\GitHub\MVCBlueRay\MVCBlueRay\MVCBlueRay\obj\Debug\MVCBlueRay.Migrations.AddedDataTypeRange.resources

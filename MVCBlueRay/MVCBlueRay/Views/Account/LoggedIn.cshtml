@@ -3,12 +3,12 @@
     ViewBag.Title = "LoggedIn";
 }
 
-<h2>LoggedIn</h2>
-
 @if(Session["UserID"] != null)
 {
     <h2>Hello @Session["Username"].ToString()</h2>
 }
+
+<h2>Your profile</h2>
 
 <table class="table">
     <tr>
@@ -56,4 +56,4 @@
 <br/>
 @Html.ActionLink("Create a new Blu-Ray", "Create", "BluRay")
 <br />
-@Html.ActionLink("Change User password", "Edit", new { id = Session["UserID"] })
+@Html.ActionLink("Change User password", "ChangePassword", new { id = Session["UserID"] })

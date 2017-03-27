@@ -20,6 +20,8 @@ namespace MVCBlueRay.Controllers
 
         public ActionResult Create()
         {
+            if (Session["UserID"] == null)
+                return RedirectToAction("Login", "Account");
             return View();
         }
 

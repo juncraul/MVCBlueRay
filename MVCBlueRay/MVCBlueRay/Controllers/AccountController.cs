@@ -103,14 +103,18 @@ namespace MVCBlueRay.Controllers
         }
 
         //Edit
-        public ActionResult Edit(int id)
+        public ActionResult ChangePassword(int id)
         {
             using (MyDbContext db = new MyDbContext())
             {
                 User user = db.Users.FirstOrDefault(u => u.Id == id);
-                if(user != null)
+                UserChangePasswordViewModel userChangePasswordViewModel = new UserChangePasswordViewModel()
                 {
-                    return View(user);
+                    Id = user.Id
+                };
+                if (user != null)
+                {
+                    return View(userChangePasswordViewModel);
                 }
                 else
                 {
@@ -120,18 +124,27 @@ namespace MVCBlueRay.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(User user)
+        public ActionResult ChangePassword(UserChangePasswordViewModel model)
         {
             if(ModelState.IsValid)
             {
                 using (MyDbContext db = new MyDbContext())
                 {
+                    User user = db.Users.FirstOrDefault(u => u.Id == model.Id);
+                    if (user.Password != model.OldPassword)
+                    {
+                        ViewBag.Message = "Old Password is incorrect.";
+                        return View(model);
+                    }
+
+                    user.Password = model.NewPassword;
+                    user.ConfirmPassword = model.ConfirmPassword;
                     db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            return View(user);
+            return View(model);
         }
 
         public ActionResult AddBluRay()
