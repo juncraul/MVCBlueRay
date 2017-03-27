@@ -38,5 +38,73 @@ namespace MVCBlueRay.Controllers
             }
             return View();
         }
+
+        //Edit
+        public ActionResult Edit(int id)
+        {
+            using (MyDbContext db = new MyDbContext())
+            {
+                BluRay blueRay = db.BluRays.FirstOrDefault(u => u.Id == id);
+                if (blueRay != null)
+                {
+                    return View(blueRay);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(BluRay blueRay)
+        {
+            if (ModelState.IsValid)
+            {
+                using (MyDbContext db = new MyDbContext())
+                {
+                    db.Entry(blueRay).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(blueRay);
+        }
+
+        //Details
+        public ActionResult Details(int id)
+        {
+            using (MyDbContext db = new MyDbContext())
+            {
+                BluRay blueRay = db.BluRays.FirstOrDefault(u => u.Id == id);
+                if (blueRay != null)
+                {
+                    return View(blueRay);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+        }
+
+        //Delete
+        public ActionResult Delete(int id)
+        {
+            using (MyDbContext db = new MyDbContext())
+            {
+                BluRay blueRay = db.BluRays.FirstOrDefault(u => u.Id == id);
+                if (blueRay != null)
+                {
+                    db.Entry(blueRay).State = System.Data.Entity.EntityState.Deleted;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+        }
     }
 }

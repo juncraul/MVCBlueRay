@@ -43,15 +43,17 @@
                 @Html.DisplayFor(modelItem => item.RunTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Edit", "Edit", "BluRay", new { id = item.Id }, htmlAttributes: new { id = "editLink" }) |
+                @Html.ActionLink("Details", "Details", "BluRay", new { id = item.Id }, htmlAttributes: new { id = "detailsLink" }) @*|
+                @Html.ActionLink("Delete", "Delete", "BluRay", new { id = item.Id }, htmlAttributes: new { id = "deleteLink" })*@
             </td>
         </tr>
     }
 
 </table>
 
-@Html.ActionLink("Add a Blu-Ray to collection", "AddBluRay")
+@Html.ActionLink("Add an existing Blu-Ray to your collection", "AddBluRay")
+<br/>
+@Html.ActionLink("Create a new Blu-Ray", "Create", "BluRay")
 <br />
-@Html.ActionLink("Change User settings", "Edit", new { id = Session["UserID"] })
+@Html.ActionLink("Change User password", "Edit", new { id = Session["UserID"] })

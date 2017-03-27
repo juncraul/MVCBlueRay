@@ -227,6 +227,8 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\AddBluRay.cshtml" />
     <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\BluRay\Edit.cshtml" />
+    <Content Include="Views\BluRay\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
