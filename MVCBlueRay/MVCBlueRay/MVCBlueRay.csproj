@@ -181,6 +181,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebConfigurationReader.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BluRayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -207,12 +208,17 @@
     <Compile Include="Migrations\201703280720282_AddedIs3partyProperty.Designer.cs">
       <DependentUpon>201703280720282_AddedIs3partyProperty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703281113245_AddedToken.cs" />
+    <Compile Include="Migrations\201703281113245_AddedToken.Designer.cs">
+      <DependentUpon>201703281113245_AddedToken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BluRay.cs" />
     <Compile Include="Models\CheckBloxViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Models\ReCaptcha.cs" />
+    <Compile Include="Models\Token.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBlueRay.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -276,6 +282,10 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\_ExternalLogin.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -310,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703280720282_AddedIs3partyProperty.resx">
       <DependentUpon>201703280720282_AddedIs3partyProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703281113245_AddedToken.resx">
+      <DependentUpon>201703281113245_AddedToken.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

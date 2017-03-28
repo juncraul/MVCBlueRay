@@ -11,5 +11,7 @@ namespace MVCBlueRay.Models
         public DbSet<User> Users { get; set; }
         public DbSet<BluRay> BluRays { get; set; }
         public DbSet<UserBlueRay> UserBlueRays { get; set; }
+
+        public DbSet<Token> Tokens { get; set; }
     }
 }

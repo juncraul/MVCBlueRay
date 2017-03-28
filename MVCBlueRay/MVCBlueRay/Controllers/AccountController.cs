@@ -8,6 +8,9 @@ using System.Net;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using System.Net.Mail;
+using System.Text;
+using MVCBlueRay.App_Start;
 
 namespace MVCBlueRay.Controllers
 {
@@ -18,7 +21,7 @@ namespace MVCBlueRay.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
-
+        
         public ActionResult Register()
         {
             return View();
@@ -68,7 +71,7 @@ namespace MVCBlueRay.Controllers
         {
             using (MyDbContext db = new MyDbContext())
             {
-                User userFound = db.Users.FirstOrDefault(u => u.Username == user.Username);
+                User userFound = db.Users.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Username);
                 if(userFound != null)
                 {
                     if(userFound.IsRegisteredWith3rdParty || userFound.Password == user.Password)
@@ -276,6 +279,109 @@ namespace MVCBlueRay.Controllers
             }
         }
 
+
+        //
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (MyDbContext db = new MyDbContext())
+                {
+                    User user = db.Users.FirstOrDefault(u => u.Email == model.Email);
+                    if (user == null)
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        return View("ForgotPasswordConfirmation");
+                    }
+
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    string code = Guid.NewGuid().ToString();
+                    Token token = new Token
+                    {
+                        Code = code,
+                        Value = user.Email,
+                        Type = WebConfigurationReader.TokenTypePasswordReset
+                    };
+                    string name = user.FirstName + " " + user.LastName;
+                    SendPasswordReset(model.Email, string.IsNullOrWhiteSpace(name) ? user.Username : name, code);
+                    db.Tokens.Add(token);
+                    db.SaveChanges();
+                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // GET: /Account/ForgotPasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        //
+        // GET: /Account/ResetPassword
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string code)
+        {
+            return code == null ? View("Error") : View();
+        }
+
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            using (MyDbContext db = new MyDbContext())
+            {
+                User user = db.Users.FirstOrDefault(u => u.Email == model.Email);
+                if (user == null)
+                {
+                    // Don't reveal that the user does not exist
+                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+                }
+
+                Token token = db.Tokens.FirstOrDefault(a => a.Type == WebConfigurationReader.TokenTypePasswordReset && a.Value == model.Email);
+                if(token.Code != model.Code)
+                {
+                    return RedirectToAction("Index");
+                }
+                user.Password = model.Password;
+                user.ConfirmPassword = model.ConfirmPassword;
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(token).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+        }
+
+        public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult AddBluRay(UserViewModel userView)
         {
@@ -313,6 +419,31 @@ namespace MVCBlueRay.Controllers
                 db.SaveChanges();
                 return RedirectToAction("LoggedIn");
             }
+        }
+
+        public void SendPasswordReset(string email, string username, string uniqueId)
+        {
+            StringBuilder emailBody = new StringBuilder();
+            emailBody.Append("Dear " + username + ", <br/><br/>");
+            emailBody.Append("Please click on the following link to reset your password<br/>");
+            emailBody.Append("<a href=\"http://localhost:50354/Account/ResetPassword?code=" + uniqueId + "\">Reset Link</a>");
+
+            MailMessage mail = new MailMessage(WebConfigurationReader.EmailToSendFrom, email)
+            {
+                Body = emailBody.ToString(),
+                Subject = "Reset your password",
+                IsBodyHtml = true
+            };
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential()
+                {
+                    UserName = WebConfigurationReader.EmailToSendFrom,
+                    Password = WebConfigurationReader.EmailToSendFromPassword
+                },
+                EnableSsl = true
+            };
+            smtpClient.Send(mail);
         }
 
         private const string XsrfKey = "XsrfId";
