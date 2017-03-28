@@ -66,7 +66,7 @@ namespace MVCBlueRay.Controllers
                 User userFound = db.Users.FirstOrDefault(u => u.Username == user.Username);
                 if(userFound != null)
                 {
-                    if(userFound.Password == user.Password)
+                    if(userFound.IsRegisteredWith3rdParty || userFound.Password == user.Password)
                     {
                         Session["UserID"] = userFound.Id.ToString();
                         Session["Username"] = userFound.Username.ToString();
@@ -113,9 +113,7 @@ namespace MVCBlueRay.Controllers
                 User user = db.Users.FirstOrDefault(u => u.Email == loginInfo.Email);
                 if (user != null)
                 {
-                    //await SignInAsync(user, isPersistent: false);
-                    //return RedirectToLocal(returnUrl);
-                    return RedirectToAction("Login", user);
+                    return Login(user);
                 }
                 else
                 {
@@ -151,7 +149,8 @@ namespace MVCBlueRay.Controllers
                     Email = model.Email,
                     Username = model.Email,
                     Password = "NoPassword",
-                    ConfirmPassword = "NoPassword"
+                    ConfirmPassword = "NoPassword",
+                    IsRegisteredWith3rdParty = true
                 };
                 using (MyDbContext db = new MyDbContext())
                 {
@@ -167,7 +166,7 @@ namespace MVCBlueRay.Controllers
                     }
                     db.Users.Add(user);
                     db.SaveChanges();
-                    return RedirectToAction("Login", user);
+                    return Login(user);
                 }
             }
             ViewBag.ReturnUrl = returnUrl;
@@ -204,7 +203,8 @@ namespace MVCBlueRay.Controllers
                 User user = db.Users.FirstOrDefault(u => u.Id == id);
                 UserChangePasswordViewModel userChangePasswordViewModel = new UserChangePasswordViewModel()
                 {
-                    Id = user.Id
+                    Id = user.Id,
+                    IsRegisteredWith3rdParty = user.IsRegisteredWith3rdParty
                 };
                 if (user != null)
                 {
@@ -225,12 +225,13 @@ namespace MVCBlueRay.Controllers
                 using (MyDbContext db = new MyDbContext())
                 {
                     User user = db.Users.FirstOrDefault(u => u.Id == model.Id);
-                    if (user.Password != model.OldPassword)
+                    if (user.Password != model.OldPassword && user.IsRegisteredWith3rdParty == false)
                     {
                         ViewBag.Message = "Old Password is incorrect.";
                         return View(model);
                     }
 
+                    user.IsRegisteredWith3rdParty = false;
                     user.Password = model.NewPassword;
                     user.ConfirmPassword = model.ConfirmPassword;
                     db.Entry(user).State = System.Data.Entity.EntityState.Modified;

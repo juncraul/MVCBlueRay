@@ -49,6 +49,8 @@ namespace MVCBlueRay.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
+        public bool IsRegisteredWith3rdParty { get; set; }
+
         public virtual ICollection<UserBlueRay> UserBlueRays { get; set; }
     }
 
@@ -56,8 +58,7 @@ namespace MVCBlueRay.Models
     {
         [Key]
         public int Id { get; set; }
-
-        [Required]
+        
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]
         public string OldPassword { get; set; }
@@ -72,5 +73,6 @@ namespace MVCBlueRay.Models
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        public bool IsRegisteredWith3rdParty { get; set; }
     }
 }

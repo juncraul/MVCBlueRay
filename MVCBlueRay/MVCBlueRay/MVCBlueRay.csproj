@@ -203,6 +203,10 @@
     <Compile Include="Migrations\201703271421480_AddedDataTypeRange.Designer.cs">
       <DependentUpon>201703271421480_AddedDataTypeRange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703280720282_AddedIs3partyProperty.cs" />
+    <Compile Include="Migrations\201703280720282_AddedIs3partyProperty.Designer.cs">
+      <DependentUpon>201703280720282_AddedIs3partyProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BluRay.cs" />
     <Compile Include="Models\CheckBloxViewModel.cs" />
@@ -302,6 +306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703271421480_AddedDataTypeRange.resx">
       <DependentUpon>201703271421480_AddedDataTypeRange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703280720282_AddedIs3partyProperty.resx">
+      <DependentUpon>201703280720282_AddedIs3partyProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
