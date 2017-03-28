@@ -13,8 +13,6 @@ namespace MVCBlueRay.Controllers
 {
     public class AccountController : Controller
     {
-        public UserManager<ApplicationUser> UserManager { get; private set; }
-
         // GET: Account
         public ActionResult Index()
         {
@@ -31,6 +29,13 @@ namespace MVCBlueRay.Controllers
         {
             if(ModelState.IsValid)
             {
+                string encodedResponse = Request.Form["g-Recaptcha-Response"];
+                bool isCaptchaValid = (ReCaptcha.Validate(encodedResponse)=="True");
+                if(!isCaptchaValid)
+                {
+                    TempData["recaptcha"] = "Please verify that you are not a robot";
+                    return View();
+                }
                 using (MyDbContext db = new MyDbContext())
                 {
                     if(db.Users.FirstOrDefault(a=>a.Username == user.Username) != null)
@@ -331,14 +336,7 @@ namespace MVCBlueRay.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
-        {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-        }
-
+        
         private class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri) : this(provider, redirectUri, null)

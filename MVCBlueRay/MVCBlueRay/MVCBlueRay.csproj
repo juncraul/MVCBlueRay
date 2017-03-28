@@ -212,6 +212,7 @@
     <Compile Include="Models\CheckBloxViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MyDbContext.cs" />
+    <Compile Include="Models\ReCaptcha.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBlueRay.cs" />
     <Compile Include="Models\UserViewModel.cs" />

@@ -43,7 +43,12 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div>
+@Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+</div>
+<div>
+    @Html.ActionLink("Back to My Collection", "LoggedIn", "Account")
+</div>
+<div>
+    @Html.ActionLink("Back to Blu-Ray List", "Index")
+</div>

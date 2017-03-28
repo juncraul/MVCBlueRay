@@ -75,4 +75,12 @@ namespace MVCBlueRay.Models
         public string ConfirmPassword { get; set; }
         public bool IsRegisteredWith3rdParty { get; set; }
     }
+
+    public class ForgotPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
 }

@@ -29,9 +29,9 @@ namespace MVCBlueRay.App_Start
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-               appId: "1855063424708302",
-               appSecret: "5b7b1a87a129bdbd360053b41ba1dc04");
+            //app.UseFacebookAuthentication(
+            //   appId: "",
+            //   appSecret: "");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
