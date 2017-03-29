@@ -279,6 +279,44 @@ namespace MVCBlueRay.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult AddBluRay(UserViewModel userView)
+        {
+            if (Session["UserID"] == null)
+                return RedirectToAction("Login");
+
+            int id = int.Parse(Session["UserID"].ToString());
+            using (MyDbContext db = new MyDbContext())
+            {
+                User user = db.Users.FirstOrDefault(u => u.Id == id);
+
+                //Delete any uncheked bluerays
+                foreach (CheckBloxViewModel c in userView.BluRays.Where(b => !b.Checked))
+                {
+                    //check if blueray exists in user's collection
+                    UserBlueRay userBlueRayToDelete = user.UserBlueRays.FirstOrDefault(u => u.BluRayId == c.Id && u.UserId == user.Id);
+                    if (userBlueRayToDelete == null) continue;
+
+                    //delete the use-bluray connection
+                    db.Entry(userBlueRayToDelete).State = System.Data.Entity.EntityState.Deleted;
+                }
+
+                //Loop through checked bluerays and add them to the user
+                foreach (CheckBloxViewModel c in userView.BluRays.Where(b => b.Checked))
+                {
+                    //Blueray already exists in user's collection
+                    if (db.UserBlueRays.FirstOrDefault(a => a.BluRayId == c.Id && a.UserId == user.Id) != null) continue;
+
+                    //Create new user-bluray connection and add it 
+                    UserBlueRay entity = db.UserBlueRays.Create();
+                    entity.BluRayId = c.Id;
+                    entity.UserId = id;
+                    db.UserBlueRays.Add(entity);
+                }
+                db.SaveChanges();
+                return RedirectToAction("LoggedIn");
+            }
+        }
 
         //
         // GET: /Account/ForgotPassword
@@ -309,6 +347,11 @@ namespace MVCBlueRay.Controllers
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = Guid.NewGuid().ToString();
+                    //Delete old tokens
+                    foreach(Token t in db.Tokens.Where(a => a.Type == WebConfigurationReader.TokenTypePasswordReset && a.Value == user.Email).ToList())
+                    {
+                        db.Entry(t).State = System.Data.Entity.EntityState.Deleted;
+                    }
                     Token token = new Token
                     {
                         Code = code,
@@ -357,16 +400,11 @@ namespace MVCBlueRay.Controllers
             using (MyDbContext db = new MyDbContext())
             {
                 User user = db.Users.FirstOrDefault(u => u.Email == model.Email);
-                if (user == null)
-                {
-                    // Don't reveal that the user does not exist
-                    return RedirectToAction("ResetPasswordConfirmation", "Account");
-                }
-
                 Token token = db.Tokens.FirstOrDefault(a => a.Type == WebConfigurationReader.TokenTypePasswordReset && a.Value == model.Email);
-                if(token.Code != model.Code)
+                if (user == null || token.Code != model.Code)
                 {
-                    return RedirectToAction("Index");
+                    ViewBag.Message = "Wrong email or reset link expired";
+                    return View(model);
                 }
                 user.Password = model.Password;
                 user.ConfirmPassword = model.ConfirmPassword;
@@ -380,45 +418,6 @@ namespace MVCBlueRay.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
-        }
-
-        [HttpPost]
-        public ActionResult AddBluRay(UserViewModel userView)
-        {
-            if (Session["UserID"] == null)
-                return RedirectToAction("Login");
-            
-            int id = int.Parse(Session["UserID"].ToString());
-            using (MyDbContext db = new MyDbContext())
-            {
-                User user = db.Users.FirstOrDefault(u => u.Id == id);
-
-                //Delete any uncheked bluerays
-                foreach(CheckBloxViewModel c in userView.BluRays.Where(b=>!b.Checked))
-                {
-                    //check if blueray exists in user's collection
-                    UserBlueRay userBlueRayToDelete = user.UserBlueRays.FirstOrDefault(u => u.BluRayId == c.Id && u.UserId == user.Id);
-                    if (userBlueRayToDelete == null) continue;
-
-                    //delete the use-bluray connection
-                    db.Entry(userBlueRayToDelete).State = System.Data.Entity.EntityState.Deleted;
-                }
-
-                //Loop through checked bluerays and add them to the user
-                foreach (CheckBloxViewModel c in userView.BluRays.Where(b=>b.Checked))
-                {
-                    //Blueray already exists in user's collection
-                    if (db.UserBlueRays.FirstOrDefault(a => a.BluRayId == c.Id && a.UserId == user.Id) != null) continue;
-
-                    //Create new user-bluray connection and add it 
-                    UserBlueRay entity = db.UserBlueRays.Create();
-                    entity.BluRayId = c.Id;
-                    entity.UserId = id;
-                    db.UserBlueRays.Add(entity);
-                }
-                db.SaveChanges();
-                return RedirectToAction("LoggedIn");
-            }
         }
 
         public void SendPasswordReset(string email, string username, string uniqueId)
